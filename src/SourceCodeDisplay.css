@@ -1,0 +1,65 @@
+/* SourceCodeDisplay.css */
+.code-container {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 16px 0;
+  font-family: 'Courier New', Courier, monospace;
+  overflow: hidden;
+  background-color: #000;
+  /* ソースコードエリアを完全な黒 */
+  position: relative;
+}
+
+.code-header {
+  background-color: #333;
+  /* ヘッダをダークグレー */
+  color: #fff;
+  padding: 4px 12px;
+  /* 高さを低くするためにパディングを小さく */
+  display: flex;
+  justify-content: space-between;
+  /* 左右に配置 */
+  align-items: center;
+  margin: 0;
+  /* マージンを削除 */
+}
+
+.file-name {
+  cursor: pointer;
+  font-size: 80%;
+  color: #fff;
+  /* ファイル名の色を白に */
+}
+
+.file-name:hover {
+  text-decoration: underline;
+}
+
+.copy-button {
+  background-color: transparent;
+  /* 無色 */
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 80%;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  /* マージンを削除 */
+  position: relative;
+}
+
+.copy-button:hover {
+  text-decoration: underline;
+}
+
+.copy-button svg {
+  margin-right: 5px;
+}
+
+.code-container pre {
+  margin: 0;
+  /* コードエリアのマージンを削除 */
+  border-radius: 0 0 5px 5px;
+  /* 角を丸くする */
+}
