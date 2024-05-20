@@ -1,45 +1,67 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* メインコンテナのスタイル */
+.main-container {
+  width: 80%; /* 画面全体の80%の幅 */
+  margin: 0 auto; /* 水平方向に中央揃え */
+  padding: 20px; /* 内側の余白 */
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 影を追加 */
+  background-color: #fff; /* 背景色を白に設定 */
+  border-radius: 8px; /* 角を丸く */
+}
+
+/* 既存のスタイル */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+div {
+  margin-bottom: 20px;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+select, textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+textarea {
+  width: calc(100% - 40px); /* 全体の幅から左右のマージンを引いた幅 */
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin: 20px; /* 上下左右に20pxのマージンを設定 */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+input[type="checkbox"] {
+  margin-right: 5px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s;
 }
 
-.card {
-  padding: 2em;
+button:hover {
+  background-color: #0056b3;
 }
 
-.read-the-docs {
-  color: #888;
+.loadingSpinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

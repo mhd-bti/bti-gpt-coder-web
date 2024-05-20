@@ -1,0 +1,43 @@
+/* 全てのボタンに共通のスタイル */
+button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+/* ファイル選択とGenerate Codeボタンのデフォルトスタイル */
+.button-primary {
+    background-color: #add8e6;
+    /* 薄いブルー */
+    color: #333;
+}
+
+.button-primary:hover {
+    background-color: #0056b3;
+    /* マウスオーバー時の背景色 */
+    color: white;
+}
+
+/* Clear、Resetボタンのスタイル */
+.button-secondary {
+    background-color: #e0e0e0;
+    /* 現在のグレー色 */
+    color: #333;
+}
+
+.button-secondary:hover {
+    background-color: #c0c0c0;
+    /* マウスオーバー時の背景色 */
+    color: #333;
+}
+
+button:active,
+button:focus {
+    background-color: #e0e0e0;
+    /* アクティブまたはフォーカス時の背景色 */
+    color: #333;
+    /* アクティブまたはフォーカス時のテキスト色 */
+}

@@ -11,17 +11,14 @@
 }
 
 .code-header {
-  background-color: #333;
-  /* ヘッダをダークグレー */
+  background-color: rgba(51, 51, 51, 0.8);
+  /* ヘッダを透過ダークグレーに設定 */
   color: #fff;
   padding: 4px 12px;
-  /* 高さを低くするためにパディングを小さく */
   display: flex;
   justify-content: space-between;
-  /* 左右に配置 */
   align-items: center;
   margin: 0;
-  /* マージンを削除 */
 }
 
 .file-name {
@@ -31,8 +28,11 @@
   /* ファイル名の色を白に */
 }
 
-.file-name:hover {
+.file-name:hover,
+.file-name:active {
   text-decoration: underline;
+  background-color: transparent;
+  /* ホバーとアクティブ時の背景色を透明に設定 */
 }
 
 .copy-button {
@@ -49,8 +49,11 @@
   position: relative;
 }
 
-.copy-button:hover {
+.copy-button:hover,
+.copy-button:active {
   text-decoration: underline;
+  background-color: transparent;
+  /* ホバーとアクティブ時の背景色を透明に設定 */
 }
 
 .copy-button svg {
@@ -62,4 +65,48 @@
   /* コードエリアのマージンを削除 */
   border-radius: 0 0 5px 5px;
   /* 角を丸くする */
+}
+
+/* 全てのボタンに共通のスタイル */
+button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s;
+}
+
+/* ファイル選択とGenerate Codeボタンのデフォルトスタイル */
+.button-primary {
+  background-color: #add8e6;
+  /* 薄いブルー */
+  color: #333;
+}
+
+.button-primary:hover {
+  background-color: #0056b3;
+  /* マウスオーバー時の背景色 */
+  color: white;
+}
+
+/* Clear、Resetボタンのスタイル */
+.button-secondary {
+  background-color: #e0e0e0;
+  /* 現在のグレー色 */
+  color: #333;
+}
+
+.button-secondary:hover {
+  background-color: #c0c0c0;
+  /* マウスオーバー時の背景色 */
+  color: #333;
+}
+
+button:active,
+button:focus {
+  background-color: transparent;
+  /* アクティブまたはフォーカス時の背景色 */
+  color: #fff;
+  /* アクティブまたはフォーカス時のテキスト色 */
 }

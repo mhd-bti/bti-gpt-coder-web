@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
+import './App.css';
 
 import SourceCodeDisplay from './SourceCodeDisplay.jsx';
 import ImageComponent from './ImageComponent.jsx';
@@ -20,7 +21,7 @@ const App = () => {
   const [isAutoDeploy, setIsAutoDeploy] = useState(false);
   const [model, setModel] = useState('gpt-4o');
   const [isLoading, setIsLoading] = useState(false);
-  const [systemPrompt, setSystemPrompt] = useState('あなたは、[React]に精通したプロのITエンジニアです。\n以下の入力内容を元に完全なソースコードを生成してください。\nなお、生成するソースコードは、最上位の親コンポーネントであるApp（ファイル名：App.jsx）および、必要な子コンポーネントを全て生成してください。\n\n# 出力フォーマット\n以下の情報を出力してください。\n1.追加npmライブラリ\n - 追加でインポートが必要なライブラリを列挙する\n2.ソースコード内容\n - 実行可能な完全なソースコードを出力する\n - 出力は、「ソースコードJSONフォーマット」に従う\n\n# ソースコードJSONフォーマット\n完全なJSON形式のデータだけを必ず出力してください。\nJSON以外は絶対に出力しないでください。\nJSONなので、{で始まり、}で終わるようにしてください。\n\n{\n  "result": [\n    {\n      "filename": "ファイル名",\n      "code": "コードの内容",\n      "description": "コードの簡単な説明"\n    }\n  ]\n}\n\nJSONデータは必ず以下に従ってください。\n- JSONデータはひとつだけ出力する\n- 結果が1件のみの場合でも、resultは配列とする\n- 結果が0件の場合は、resultは空の配列ととする\n- 結果には、filename、code、descriptionを必ず含め、値がない場合には空文字""とする');
+  const [systemPrompt, setSystemPrompt] = useState('あなたは、[React]に精通したプロのITエンジニアです。\nユーザーの入力内容を元に完全なソースコードを生成してください。\nなお、生成するソースコードは、最上位の親コンポーネントであるApp（ファイル名：App.jsx）および、必要な子コンポーネントを全て生成してください。\n\n# 出力フォーマット\n以下の情報を出力してください。\n1.追加npmライブラリ\n - 追加でインポートが必要なライブラリを列挙する\n2.ソースコード内容\n - 実行可能な完全なソースコードを出力する\n - 出力は、「ソースコードJSONフォーマット」に従う\n\n# ソースコードJSONフォーマット\n必ず完全なJSON形式のデータだけを出力してください。\nJSON以外は絶対に出力しないでください。\nJSONなので、{で始まり、}で終わるようにしてください。\n\n{\n  "result": [\n    {\n      "filename": "ファイル名",\n      "code": "コードの内容",\n      "description": "コードの簡単な説明"\n    }\n  ]\n}\n\nJSONデータは必ず以下に従ってください。\n- JSONデータはひとつだけ出力する\n- 結果が1件のみの場合でも、resultは配列とする\n- 結果が0件の場合は、resultは空の配列ととする\n- 結果には、filename、code、descriptionを必ず含め、値がない場合には空文字""とする');
   const [sendSystemPrompt, setSendSystemPrompt] = useState(false);
 
   // コード生成APIからのレスポンスを表示する
@@ -90,12 +91,13 @@ const App = () => {
   }, [chatId]);
 
   return (
-    <div>
+    <div className="main-container">
       {/* コード生成中にローディングスピナーを表示する */}
       {isLoading && <LoadingSpinner onClose={handleCloseSpinner} />}
-      <h1>Auto Programming Service</h1>
+      <h1>BTI GPT Coder DX</h1>
       {/* チャット履歴選択 */}
       <div>
+        <h2>チャット履歴ID</h2>
         <select value={chatId} onChange={(e) => setchatId(e.target.value)}>
           {chatIds.map((value) => <option value={value.id} key={value.id}>{value.id} - {value.prompt.substring(0, 20)}</option>)}
         </select>
@@ -109,6 +111,7 @@ const App = () => {
       {/* ユーザープロンプト入力 */}
       <div>
         <h2>ユーザープロンプト</h2>
+        <p>以下にAIへの指示を入力してください。（例：「"Hello, World!"を表示するアプリを作成して」）</p>
         <textarea value={input} onChange={(e) => setInput(e.target.value)} rows="10" cols="80" placeholder="Enter your programming request here" />
       </div>
       {/* 画像コンポーネント */}
@@ -119,8 +122,8 @@ const App = () => {
           {envModels.map((model) => <option value={model} key={model}>{model}</option>)}
         </select>
         <input type="checkbox" checked={isTest} onChange={(e) => setIsTest(e.target.checked)} /> test mode<br />
-        <button onClick={handleSubmit}>Generate Code</button>
-        <button onClick={handleReset}>Reset</button>
+        <button onClick={handleSubmit} className="button-primary">Generate Code</button>
+        <button onClick={handleReset} className="button-secondary">Reset</button>
       </div>
       {/* あとがき表示 */}
       <div>

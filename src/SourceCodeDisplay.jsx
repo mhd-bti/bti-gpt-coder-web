@@ -39,7 +39,7 @@ const SourceCodeDisplay = (props) => {
     };
 
     // コードを投稿する
-    const handlePostCode =  () => {
+    const handlePostCode = () => {
         const data = {
             code: code,
             filename: fileName,
@@ -73,7 +73,7 @@ const SourceCodeDisplay = (props) => {
 
     return (
         <div>
-            <h2>[{index}] {fileName} <button onClick={() => { handlePostCode() }}>{isDeployed ? 'Deployed' : 'Deploy'}</button></h2>
+            <h2>[{index}] {fileName} <button onClick={() => { handlePostCode() }} className={isDeployed ? "button-secondary" : "button-primary"}>{isDeployed ? 'Deployed' : 'Deploy'}</button></h2>
             <p>{description}</p>
             <div className="code-container">
                 <div className="code-header">

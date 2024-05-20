@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
+import './ImageComponent.css';
+
 const ImageComponent = (props) => {
     const fileupRef = useRef([]);
 
@@ -65,7 +67,7 @@ const ImageComponent = (props) => {
     return (
         <div className="relative border-2 border-red-200 bg-red-100 w-[600px] h-[600px] flex flex-col space-y-4">
             {props.images.map((file) => <p key={file.name}>{file.name} [{file.size}B]</p>)}
-            <button onClick={() => handleFileup()}>ファイル選択</button>
+            <button onClick={() => handleFileup()} className="button-primary">ファイル選択</button>
             <input
                 hidden
                 ref={fileupRef}
@@ -75,7 +77,7 @@ const ImageComponent = (props) => {
                 onClick={(e) => handleFileupClick(e)}
                 onChange={(e) => { console.log("onChange"); handleInputFile(e) }}
             />
-            <button onClick={() => { handleClear() }}>Clear</button>
+            <button onClick={() => { handleClear() }} className="button-secondary">Clear</button>
         </div>
     );
 };
