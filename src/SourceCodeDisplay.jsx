@@ -1,5 +1,5 @@
 // SourceCodeDisplay.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import axios from 'axios';
 
@@ -10,17 +10,19 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import './SourceCodeDisplay.css'; // CSSファイルのインポート
 
 const SourceCodeDisplay = (props) => {
-    const code = props.code;
     const language = props.language;
-    const fileName = props.fileName;
+    const isAutoDeploy = props.isAutoDeploy;
     const index = props.index;
+    const code = props.code;
+    const fileName = props.fileName;
     const description = props.description;
     const [fileNameCopied, setFileNameCopied] = useState(false);
     const [iconCopied, setIconCopied] = useState(false);
-    const [isVisible, setIsVisible] = useState(true);
+    const [isDeployed, setisDeployed] = useState(false);
 
     if (!fileName) return null;
 
+    // コードをコピーする
     const copyToClipboard = (text, type) => {
         navigator.clipboard.writeText(text);
         if (type === 'fileName') {
@@ -37,9 +39,14 @@ const SourceCodeDisplay = (props) => {
     };
 
     // コードを投稿する
-    const handlePostCode = async (data) => {
-        console.log("data: ");
-        console.log(data);
+    const handlePostCode =  () => {
+        const data = {
+            code: code,
+            filename: fileName,
+            description: description
+        };
+
+        console.log("data: ", data);
         axios.post('http://localhost:5000/api/post-code', data)
             .then((response) => {
                 console.log('response: ');
@@ -47,8 +54,8 @@ const SourceCodeDisplay = (props) => {
                 console.log("response.data.result: ");
                 console.log(response.data.result);
 
-                if(response.data.result === "success"){
-                    setIsVisible(false);
+                if (response.data.result === "success") {
+                    setisDeployed(true);
                 }
             })
             .catch((error) => {
@@ -56,11 +63,17 @@ const SourceCodeDisplay = (props) => {
             });
     };
 
-    // if(!isVisible) return null;
+    // 自動投稿モードの場合
+    if (isAutoDeploy && !isDeployed && fileName && code) {
+        console.log("Auto deploy");
+        handlePostCode();
+    }
+
+    // if(isDeployed) return null;
 
     return (
         <div>
-            <h2>[{index}] {fileName} <button onClick={() => { handlePostCode({ code: code, filename: fileName, description: description }); }}>Apply</button></h2>
+            <h2>[{index}] {fileName} <button onClick={() => { handlePostCode() }}>{isDeployed ? 'Deployed' : 'Deploy'}</button></h2>
             <p>{description}</p>
             <div className="code-container">
                 <div className="code-header">
