@@ -21,13 +21,21 @@ const App = () => {
   const [isAutoDeploy, setIsAutoDeploy] = useState(false);
   const [model, setModel] = useState('gpt-4o');
   const [isLoading, setIsLoading] = useState(false);
-  const [systemPrompt, setSystemPrompt] = useState('あなたは、[React]に精通したプロのITエンジニアです。\nユーザーの入力内容を元に完全なソースコードを生成してください。\nなお、生成するソースコードは、最上位の親コンポーネントであるApp（ファイル名：App.jsx）および、必要な子コンポーネントを全て生成してください。\n\n# 出力フォーマット\n以下の情報を出力してください。\n1.追加npmライブラリ\n - 追加でインポートが必要なライブラリを列挙する\n2.ソースコード内容\n - 実行可能な完全なソースコードを出力する\n - 出力は、「ソースコードJSONフォーマット」に従う\n\n# ソースコードJSONフォーマット\n必ず完全なJSON形式のデータだけを出力してください。\nJSON以外は絶対に出力しないでください。\nJSONなので、{で始まり、}で終わるようにしてください。\n\n{\n  "result": [\n    {\n      "filename": "ファイル名",\n      "code": "コードの内容",\n      "description": "コードの簡単な説明"\n    }\n  ]\n}\n\nJSONデータは必ず以下に従ってください。\n- JSONデータはひとつだけ出力する\n- 結果が1件のみの場合でも、resultは配列とする\n- 結果が0件の場合は、resultは空の配列ととする\n- 結果には、filename、code、descriptionを必ず含め、値がない場合には空文字""とする');
+  const [systemPrompt, setSystemPrompt] = useState('あなたは、[React]に精通したプロのITエンジニアです。\nユーザーの入力内容を元に完全なソースコードを生成してください。\nなお、生成するソースコードは、最上位の親コンポーネントであるApp（ファイル名：App.jsx）および、必要な子コンポーネントを全て生成してください。\n\n# 出力フォーマット\n以下の情報を出力してください。\n1.追加npmライブラリ\n - 追加でインポートが必要なライブラリを列挙する\n2.ソースコード内容\n - 実行可能な完全なソースコードを出力する\n - 出力は、「ソースコードJSONフォーマット」に従う\n\n# ソースコードJSONフォーマット\n必ず完全なJSON形式のデータだけを出力してください。\nJSON以外は絶対に出力しないでください。\nJSONなので、{で始まり、}で終わるようにしてください。\n\n{\n  "result": [\n    {\n      "filename": "ファイル名",\n      "code": "コードの内容",\n      "description": "コードの簡単な説明"\n    }\n  ]\n}\n\nJSONデータは必ず以下に従ってください。\n- JSONデータはひとつだけ出力する\n- 結果が1件のみの場合でも、resultは配列とする\n- 結果が0件の場合は、resultは空の配列ととする\n- 結果には、filename、code、descriptionを必ず含め、値がない場合には空文字""とする\n- filenameは、srcディレクトリからの相対パスとする。例えば、ファイルのパスがsrc/components/Component.jsxであれば、"filename": "components/Component.jsx"となる');
   const [sendSystemPrompt, setSendSystemPrompt] = useState(false);
+  const [projectName, setProjectName] = useState('');
+  const [demoAdded, setDemoAdded] = useState(false);
 
   // コード生成APIからのレスポンスを表示する
   const handleSubmit = async () => {
+    if (!projectName.trim()) {
+      alert('プロジェクト名を入力してください。');
+      return;
+    }
+
     setIsLoading(true);
     axios.post('http://localhost:5000/api/generate-code', {
+      projectName: projectName,
       prevId: chatId,
       userInput: input,
       images: images,
@@ -57,6 +65,7 @@ const App = () => {
       });
   };
 
+  // 入力クリア
   const clearInput = () => {
     setInput('');
     setImages([]);
@@ -65,10 +74,12 @@ const App = () => {
     setAfterword('');
   }
 
-  // 入力リセット
+  // プロジェクトリセット
   const handleReset = () => {
+    setProjectName('');
     setchatId('');
     setchatIds([]);
+    setDemoAdded(false);
     clearInput();
   };
 
@@ -77,6 +88,29 @@ const App = () => {
     console.log("handleCloseSpinner");
     setIsLoading(false);
   };
+
+  const handleAddDemo = () => {
+    console.log("handleAddDemo: ", demoAdded);
+    
+    if (!projectName.trim()) {
+      alert('プロジェクト名を入力してください。');
+      return;
+    }
+
+    // デモ追加済に設定
+    setDemoAdded(true);
+
+    axios.post('http://localhost:5000/api/add-demo', {
+      projectName: projectName
+    })
+      .then((response) => {
+      })
+      .catch((error) => {
+        // 失敗時にはデモ未追加にする
+        setDemoAdded(false);
+        console.log(error);
+      });
+  }
 
   useEffect(() => {
     console.log("images: ", images);
@@ -95,6 +129,13 @@ const App = () => {
       {/* コード生成中にローディングスピナーを表示する */}
       {isLoading && <LoadingSpinner onClose={handleCloseSpinner} />}
       <h1>BTI GPT Coder DX</h1>
+      {/*  */}
+      <div>
+        <h2>プロジェクト名</h2>
+        <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} placeholder="Enter your project name here" />
+        <button onClick={handleReset} className="button-secondary">Reset</button>
+        <button onClick={handleAddDemo} className={demoAdded ? "button-secondary" : "button-primary"} disabled={demoAdded}>Add Demo</button>
+      </div>
       {/* チャット履歴選択 */}
       <div>
         <h2>チャット履歴ID</h2>
@@ -105,8 +146,8 @@ const App = () => {
       {/* システムプロンプト入力 */}
       <div>
         <h2>システムプロンプト</h2>
-        <input type="checkbox" checked={sendSystemPrompt} onChange={(e) => setSendSystemPrompt(e.target.checked)} />システムプロンプトを送信する<br />
         <textarea value={systemPrompt} onChange={(e) => setSystemPrompt(e.target.value)} rows="10" cols="80" placeholder="Enter your programming request here" />
+        <input type="checkbox" checked={!sendSystemPrompt} onChange={(e) => setSendSystemPrompt(e.target.checked)} />システムプロンプトを送信しない（通常は、最初の指示でのみシステムプロンプトを送信します）
       </div>
       {/* ユーザープロンプト入力 */}
       <div>
@@ -123,7 +164,6 @@ const App = () => {
         </select>
         <input type="checkbox" checked={isTest} onChange={(e) => setIsTest(e.target.checked)} /> test mode<br />
         <button onClick={handleSubmit} className="button-primary">Generate Code</button>
-        <button onClick={handleReset} className="button-secondary">Reset</button>
       </div>
       {/* あとがき表示 */}
       <div>
@@ -131,7 +171,7 @@ const App = () => {
         {
           codes.map((code, i) =>
             <div key={i}>
-              <SourceCodeDisplay fileName={code.filename} code={code.code} language="javascript" description={code.description} index={i + 1} isAutoDeploy={isAutoDeploy} />
+              <SourceCodeDisplay projectName={projectName} code={code} language="javascript" index={i + 1} isAutoDeploy={isAutoDeploy} />
             </div>
           )
         }

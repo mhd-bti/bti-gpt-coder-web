@@ -13,14 +13,14 @@ const SourceCodeDisplay = (props) => {
     const language = props.language;
     const isAutoDeploy = props.isAutoDeploy;
     const index = props.index;
-    const code = props.code;
-    const fileName = props.fileName;
-    const description = props.description;
+    const code = props.code.code;
+    const filename = props.code.filename;
+    const description = props.code.description;
     const [fileNameCopied, setFileNameCopied] = useState(false);
     const [iconCopied, setIconCopied] = useState(false);
     const [isDeployed, setisDeployed] = useState(false);
 
-    if (!fileName) return null;
+    if (!filename) return null;
 
     // コードをコピーする
     const copyToClipboard = (text, type) => {
@@ -41,8 +41,9 @@ const SourceCodeDisplay = (props) => {
     // コードを投稿する
     const handlePostCode = () => {
         const data = {
+            projectName: props.projectName,
             code: code,
-            filename: fileName,
+            filename: filename,
             description: description
         };
 
@@ -64,30 +65,35 @@ const SourceCodeDisplay = (props) => {
     };
 
     // 自動投稿モードの場合
-    if (isAutoDeploy && !isDeployed && fileName && code) {
+    if (isAutoDeploy && !isDeployed && filename && code) {
         console.log("Auto deploy");
         handlePostCode();
     }
 
+    useEffect(() => {
+        console.log("useEffect");
+        setFileNameCopied(false);
+        setIconCopied(false);
+        setisDeployed(false);
+    }, [props.code]);
+
     // if(isDeployed) return null;
 
     return (
-        <div>
-            <h2>[{index}] {fileName} <button onClick={() => { handlePostCode() }} className={isDeployed ? "button-secondary" : "button-primary"}>{isDeployed ? 'Deployed' : 'Deploy'}</button></h2>
+        <div className="code-container">
+            <h2>[{index}] {filename} <button onClick={() => { handlePostCode() }} className={isDeployed ? "button-secondary" : "button-primary"}>{isDeployed ? 'Deployed' : 'Deploy'}</button></h2>
             <p>{description}</p>
-            <div className="code-container">
-                <div className="code-header">
-                    <span className="file-name" onClick={() => copyToClipboard(fileName, 'fileName')}>
-                        {fileNameCopied ? 'copied!' : fileName}
-                    </span>
-                    <button onClick={() => copyToClipboard(code, 'icon')} className="copy-button">
-                        {iconCopied ? 'copied!' : <FontAwesomeIcon icon={faCopy} />}
-                    </button>
-                </div>
-                <SyntaxHighlighter language={language} style={tomorrow} customStyle={{ backgroundColor: '#000' }}>
-                    {code}
-                </SyntaxHighlighter>
+            <div className="code-header">
+                <span className="file-name" onClick={() => copyToClipboard(filename, 'fileName')}>
+                    {fileNameCopied ? 'copied!' : filename}
+                </span>
+                <button onClick={() => copyToClipboard(code, 'icon')} className="copy-button">
+                    {iconCopied ? 'copied!' : <FontAwesomeIcon icon={faCopy} />}
+                </button>
             </div>
+            <SyntaxHighlighter language={language} style={tomorrow} customStyle={{ backgroundColor: '#000' }}>
+                {code}
+            </SyntaxHighlighter>
         </div>
     );
 };

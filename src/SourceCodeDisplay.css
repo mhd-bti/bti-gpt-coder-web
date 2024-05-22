@@ -1,13 +1,16 @@
-/* SourceCodeDisplay.css */
 .code-container {
   border: 1px solid #ddd;
+  /* 枠線を元に戻す */
   border-radius: 5px;
+  /* 角を丸く */
   margin: 16px 0;
-  font-family: 'Courier New', Courier, monospace;
-  overflow: hidden;
-  background-color: #000;
-  /* ソースコードエリアを完全な黒 */
-  position: relative;
+  /* 上下のマージンを設定 */
+  padding: 10px;
+  /* 内側の余白を設定 */
+  background-color: #f9f9f9;
+  /* 背景色を明るいグレーに戻す */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* 影を元に戻す */
 }
 
 .code-header {
